@@ -64,4 +64,12 @@ class OrderController extends Controller
         $data =  Table::with('order')->where(['userid'=> auth()->user()->connectid,'status'=>'Enable'])->get();
         return response()->json(['data'=>$data]);
     }
+    function delete(Request $request){
+        $id = $request->id;
+        $name = Order::find($id);
+        $name->delete();
+        return response()->json([
+            'status'=>'Delete success'
+        ]);
+    }
 } 

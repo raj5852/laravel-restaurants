@@ -77,4 +77,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('table-submit',[OrderController::class,'tablesubmit'])->name('tablesubmit');
     Route::post('order-call',[OrderController::class,'ordercall'])->name('ordercall');
     Route::post('calltable',[OrderController::class,'callTable'])->name('callTable');
+    Route::post('deletestatus',[OrderController::class,'delete'])->name('deletestatus');
 });

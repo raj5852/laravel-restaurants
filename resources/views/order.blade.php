@@ -35,7 +35,7 @@
                         <div class="card-header py-3">Table Status</div>
                         <div class="card-body" id="table_status">
 
-
+                            <!-- here is tables  -->
                         </div>
                     </div>
                 </div>
@@ -46,6 +46,7 @@
                             <div class="table-responsive" id="order_status">
                                 <table class="table table-striped table-bordered">
                                     <tbody>
+                                        <input type="hidden" id="tableIdforReload">
                                         <tr>
                                             <th>Item Name</th>
                                             <th>Quantity</th>
@@ -184,11 +185,7 @@
             var productname = $("#productname").val();
             var quantity = $("#Quantity").val()
             var productid = $("#productname").val()
-            // console.log(tableid)
-            // console.log(category)
-            // console.log(productname)
-            // console.log(quantity)
-            // console.log(productid)
+
             $("#addButton").prop('disabled', true)
 
 
@@ -215,7 +212,33 @@
         })
 
 
+
+
     })
+
+    function deletestatus(id) {
+        // console.log(id)
+        var text = "Are you sure?"
+        if (confirm(text) == true) {
+            $.ajax({
+                url: '{{ route("deletestatus") }}',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    if (data.status) {
+                        console.log("delete success")
+                        callTable()
+                        var tableIdforReload = $("#tableIdforReload").val()
+                        tableLoad(tableIdforReload)
+                    }
+                }
+            })
+        }
+
+
+    }
 
     function callTable() {
         $.ajax({
@@ -263,7 +286,7 @@
                     $("tbody").append(text)
 
                     function myFun(item, index) {
-                        text += "<tr class='colbackend'><td>" + item.itemname + "</td><td><input min='1' class='form-control' id='quantitybox' type='number' value=" + item.quantity + "></td><td>" + item.rate + "</td><td>" + item.amount + "</td><td><button class='btn btn-danger'>Delete</button></td></tr>"
+                        text += "<tr class='colbackend'><td>" + item.itemname + "</td><td>" + item.quantity + "</td><td>" + item.rate + "</td><td>" + item.amount + "</td><td><button class='btn btn-danger' onclick='deletestatus(" + item.id + ")'>Delete</button></td></tr>"
                     }
 
                 }
@@ -275,6 +298,7 @@
     }
 
     function modalShow(id) {
+        $("#tableIdforReload").val(id)
         $("#tableid").val(id);
         $("#myModal").modal('show');
         $("#select_category").val('')
@@ -297,7 +321,7 @@
                     $("tbody").append(text)
 
                     function myFun(item, index) {
-                        text += "<tr class='colbackend'><td>" + item.itemname + "</td><td><input min='1' class='form-control' id='quantitybox' type='number' value=" + item.quantity + "></td><td>" + item.rate + "</td><td>" + item.amount + "</td><td><button class='btn btn-danger'>Delete</button></td></tr>"
+                        text += "<tr class='colbackend'><td>" + item.itemname + "</td><td>" + item.quantity + "</td><td>" + item.rate + "</td><td>" + item.amount + "</td><td><button class='btn btn-danger' onclick='deletestatus(" + item.id + ")' >Delete</button></td></tr>"
                     }
 
                 }
