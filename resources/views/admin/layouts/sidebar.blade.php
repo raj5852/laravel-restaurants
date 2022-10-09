@@ -25,7 +25,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ route('category') }}" class="nav-link {{ request()->is('category')?'active':'' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <i class="nav-icon fas fa-book"></i>
               <p>
                 Category
               </p>
@@ -33,7 +33,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ route('table') }}" class="nav-link {{ request()->is('table')?'active':'' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <i class="nav-icon fas fa-columns"></i>
               <p>
                 Table
               </p>
@@ -41,7 +41,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ route('tax') }}" class="nav-link {{ request()->is('tax')?'active':'' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <i class="nav-icon far fa-plus-square"></i>
               <p>
                 Tax
               </p>
@@ -49,25 +49,41 @@
           </li>
           <li class="nav-item">
             <a href="{{ route('product') }}" class="nav-link {{ request()->is('product')?'active':'' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <i class='fas fa-gift'></i>
               <p>
                 Product
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{ route('user') }}" class="nav-link {{ request()->is('user')?'active':'' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 User
               </p>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="{{ route('order') }}" class="nav-link {{ request()->is('order')?'active':'' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <i class='fas fa-handshake'></i>
               <p>
                 Order
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('bill') }}" class="nav-link {{ request()->is('bill')?'active':'' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Bill
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('signOut') }}" class="nav-link {{ request()->is('signOut')?'active':'' }}">
+            <i class='fas fa-sign-out-alt'></i>
+              <p>
+                Logout
               </p>
             </a>
           </li>

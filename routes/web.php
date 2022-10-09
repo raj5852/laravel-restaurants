@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
@@ -11,11 +12,9 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
+Route::view('/', 'login')->name('login')->middleware('guest');
 
-
-Route::view('/', 'login')->name('login');
-
-Route::view('register', 'register');
+Route::view('register', 'register')->middleware('guest');
 //Google login
 Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback', [LoginController::class, 'handleGoogleCallback']);
@@ -78,4 +77,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('order-call',[OrderController::class,'ordercall'])->name('ordercall');
     Route::post('calltable',[OrderController::class,'callTable'])->name('callTable');
     Route::post('deletestatus',[OrderController::class,'delete'])->name('deletestatus');
+
+    Route::get('bill',[BillController::class,'index'])->name('bill');
+    Route::post('order-now',[BillController::class,'order'])->name('ordernow');
+    Route::get('pdf',[BillController::class,'pdf'])->name('pdf');
+
+
+    Route::get('bill-get',[BillController::class,'billget'])->name('billget');
+    Route::get('signOut',[LoginController::class,'signOut'])->name('signOut');
 });

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Session;
 
 
 class LoginController extends Controller
@@ -103,5 +103,11 @@ class LoginController extends Controller
             'password' => Hash::make($data['password']),
             'type'=>'Master'
         ]);
+    }
+    public function signOut() {
+        Session::flush();
+        Auth::logout();
+  
+        return Redirect('/');
     }
 }

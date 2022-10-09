@@ -1,5 +1,7 @@
   @extends('admin.layouts.app')
   @section('css')
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+
   <style>
     .borderStyle {
       border-left: 4px solid blue;
@@ -36,7 +38,7 @@
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                       Today Sales</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{$today}} </div>
                   </div>
                   <div class="col-auto">
                     <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -54,7 +56,7 @@
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                       Yesterday Sales</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">$564.38</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">${{$yesterday}} </div>
                   </div>
                   <div class="col-auto">
                     <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -74,7 +76,7 @@
                     </div>
                     <div class="row no-gutters align-items-center">
                       <div class="col-auto">
-                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">$2235.46</div>
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">${{$sevendays}}</div>
                       </div>
                     </div>
                   </div>
@@ -94,7 +96,7 @@
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                       All Time Sales</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">$781834.38</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">${{$all}}</div>
                   </div>
                   <div class="col-auto">
                     <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -118,96 +120,9 @@
               </div>
               <div class="card-body">
                 <div id="table_status">
-                  <div class="row">
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                          Table 1
-                          <div class="mt-1 text-black-50 small">2 Person</div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="row" id="addTable">
 
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                          Table 2
-                          <div class="mt-1 text-black-50 small">4 Person</div>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-info text-white shadow">
-                        <div class="card-body">
-                          Table 3
-                          <div class="mt-1 text-white-50 small">Booked</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-info text-white shadow">
-                        <div class="card-body">
-                          Table 4
-                          <div class="mt-1 text-white-50 small">Booked</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                          Table 5
-                          <div class="mt-1 text-black-50 small">3 Person</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                          Table 6
-                          <div class="mt-1 text-black-50 small">2 Person</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                          Table 7
-                          <div class="mt-1 text-black-50 small">4 Person</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                          Table 8
-                          <div class="mt-1 text-black-50 small">6 Person</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-info text-white shadow">
-                        <div class="card-body">
-                          Table 9
-                          <div class="mt-1 text-white-50 small">Booked</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 mb-3">
-                      <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                          Table 10
-                          <div class="mt-1 text-black-50 small">8 Person</div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -219,5 +134,44 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+  @endsection
+  @section('js')
+
+  <script>
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    function callTable() {
+      $.ajax({
+        url: '{{ route("callTable") }}',
+        method: 'post',
+        success: function(data) {
+          if (data.data) {
+            var text = ""
+            var arr = data.data
+            arr.forEach(myFUnc)
+            document.getElementById("addTable").innerHTML = text;
+            console.log(text);
+
+            function myFUnc(item, index) {
+              if (item.order.length == 0) {
+
+                text += '<div class="col-lg-2 mb-3"><div class="card bg-light text-black shadow"><div class="card-body">' + item.name + '<div class="mt-1 text-black-50 small">' + item.capacity + '</div></div></div></div>'
+
+              } else {
+                text += '<div class="col-lg-2 mb-3"><div class="card bg-primary text-black shadow"><div class="card-body">' + item.name + '<div class="mt-1 text-black-50 small">' + item.capacity + '</div></div></div></div>'
+              }
+            }
+          }
+        }
+      })
+    }
+    callTable();
+  </script>
+
 
   @endsection

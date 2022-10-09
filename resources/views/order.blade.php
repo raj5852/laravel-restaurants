@@ -57,7 +57,9 @@
 
                                     </tbody>
 
+
                                 </table>
+                                <button style="display: none;" class="btn btn-success" id="ordernowbtn">Order Now</button>
                             </div>
                         </div>
                     </div>
@@ -174,8 +176,24 @@
                 }
             })
         });
+        $("#ordernowbtn").click(function() {
+            var id = $("#tableIdforReload").val()
+            $("#ordernowbtn").prop('disabled', true);
+            $.ajax({
+                url: '{{ route("ordernow") }}',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    $("#ordernowbtn").prop('disabled', false);
+                    
+                    window.location.href = "/pdf?id=" + data.status + "";
+                }
+            })
+        })
 
-
+        $("#ordernowbtn").hide();
 
         $("#table_item").on('submit', function(e) {
             e.preventDefault();
@@ -200,6 +218,9 @@
                     productid: productid
                 },
                 success: function(data) {
+
+                    $("#ordernowbtn").show();
+                    console.log(data);
                     $("#myModal").modal('hide')
                     $("#addButton").prop('disabled', false)
                     tableLoad(tableid)
@@ -230,13 +251,14 @@
                     if (data.status) {
                         console.log("delete success")
                         callTable()
+
+                        
                         var tableIdforReload = $("#tableIdforReload").val()
                         tableLoad(tableIdforReload)
                     }
                 }
             })
         }
-
 
     }
 
@@ -245,12 +267,10 @@
             url: '{{ route("callTable") }}',
             method: 'post',
             success: function(data) {
-                // console.log()
                 if (data.data) {
                     var text = ""
                     var arr = data.data
                     arr.forEach(myFUnc)
-                    // console.log(text)
                     document.getElementById("table_status").innerHTML = text;
 
                     function myFUnc(item, index) {
@@ -276,6 +296,13 @@
             },
             success: function(data) {
                 if (data.data) {
+                    if (data.data[0]) {
+                        $("#ordernowbtn").show();
+
+                    } else {
+                        $("#ordernowbtn").hide();
+
+                    }
                     $(".colbackend").remove();
 
                     var text = ""
@@ -293,8 +320,6 @@
             }
         })
 
-
-
     }
 
     function modalShow(id) {
@@ -311,6 +336,13 @@
             },
             success: function(data) {
                 if (data.data) {
+                    if (data.data[0]) {
+                        $("#ordernowbtn").show();
+
+                    } else {
+                        $("#ordernowbtn").hide();
+
+                    }
                     $(".colbackend").remove();
 
                     var text = ""
